@@ -1,4 +1,4 @@
-# Francisco Fregona's submission for the Site Reliability Engineer position at Balena.io.
+# Francisco Fregona's submission for the Site Reliability Engineer position at Balanced Patena.io.
 
 Prerequisites
 =============
