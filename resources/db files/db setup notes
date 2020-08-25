@@ -1,0 +1,50 @@
+#Created the dbsetup container (could have just copied the files, though)
+docker build -t dbsetup:2 .
+#Run it and entered it.
+docker run -dbsetupd -v /home/vagrant/dbvolume:/var/lib/postgresql/data dbsetup:2
+docker exec -it 1b7f5d96f26d bash
+
+#Then I created the tables from the names files.
+psql -U postgres
+
+CREATE TABLE firstnames(
+	pk SERIAL PRIMARY KEY,
+	name varchar(40) NOT NULL);
+
+CREATE TABLE lastnames(
+	pk SERIAL PRIMARY KEY,
+	last varchar(40) NOT NULL);
+
+COPY firstnames(name) FROM '/tmp/firstnames' DELIMITER ',';
+COPY lastnames(name) FROM '/tmp/lastnames' DELIMITER ',';
+\q
+exit
+
+#With this database created I can spin up new databases to read from it.
+#Is Password field setup failing?
+export POSTGRES_PASSWORD="holamundo"
+export PGDATA="/var/lib/postgresql/data/p"
+
+docker run -d -p 5432:5432 -v /home/vagrant/dbvolume:$PGDATA -e PGDATA=$PGDATA -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD postgres:12.0
+
+
+Test access from host:
+#sudo apt-get install psql-client-common psql-client-9.5
+#psql postgresql://localhost:5432/postgres -U postgres
+
+
+#API server
+#Pulled docker pull jazzdd/alpine-flask:python3 from https://hub.docker.com/r/jazzdd/alpine-flask/
+
+We'll run it with (removed docker --restart=always \)
+docker run --name flaskapp \
+    -p 80:80 \
+    -v /<path>/:/app \
+    -d jazzdd/alpine-flask:python3
+
+Requirements.txt:
+pip install psycopg2(=2.8.3)
+Run into issues: has to download a whole lotta packages, not a great fit for Alpine. Switching to pg8000.
+
+#Check for the api server with:
+curl http://localhost:80/randomName

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+{% block head %}
+  <head>
+  	<title>Secret Identity Generator</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+</head>
+{% endblock %}
+  <body>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">For your eyes only. Top Secret. &copy; Copyright 2019 by <a href="https://github.com/franciscofregona">Francisco Fregona</a>.</div>
+  </body>
+</html>

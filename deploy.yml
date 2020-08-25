@@ -1,0 +1,20 @@
+---
+#Load up the NFS server with the database
+- hosts: k8s-nfs
+  roles:
+    - ansible/roles/loaddatabase
+
+#Get the worker nodes to cache the images we'll need.
+#The master node has not been cleared to do workers work, so limit this
+#action to the worker nodes.
+- hosts: k8sWorkerNodes
+  roles:
+    - ansible/roles/cacheimages
+
+#Get the k8s templates to the Master node(s).
+#Worker nodes are not allowed to query the api service and get things done
+#So limit this action to the master node(s).
+- hosts: k8sMasterNodes
+  roles:
+    - ansible/roles/deploycode
+    - ansible/roles/loadk8stemplates

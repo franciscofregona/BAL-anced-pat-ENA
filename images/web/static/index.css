@@ -1,0 +1,50 @@
+body {margin:0;}
+
+#myBotnav {
+    bottom: 0px;
+    background-color:#262626;
+    width:50%; 
+    position:fixed;    
+}
+.topnav {
+overflow: hidden;
+background-color: #333;
+}
+
+.topnav a {
+float: left;
+display: block;
+color: #f2f2f2;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+font-size: 17px;
+}
+
+.topnav a:hover {
+background-color: #2d2;
+color: black;
+}
+
+.topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+.banner {
+    padding-left:16px;
+    text-align:center;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+.copy {
+    background: rgb(243, 210, 243);
+}
+.full {
+    background: rgb(243, 243, 210);
+}
+.incr {
+    background: rgb(210, 243, 243);
+}

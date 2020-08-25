@@ -1,0 +1,25 @@
+---
+- name: Create K8s directory
+  file:
+    path: /home/vagrant/k8s
+    state: directory #Crea carpetas. Requiere path
+    owner: vagrant
+    group: vagrant
+
+- name: copy the K8s template files
+  copy:
+    src: "{{playbook_dir}}/resources/{{ item }}"
+    dest: "/home/vagrant/k8s/"
+    owner: vagrant
+    group: vagrant
+  with_items:
+   - "k8syamls/."
+
+- name: copy the web image files
+  copy:
+    src: "{{playbook_dir}}/resources/{{ item }}"
+    dest: "/home/vagrant/k8s/"
+    owner: vagrant
+    group: vagrant
+  with_items:
+   - "k8syamls/."

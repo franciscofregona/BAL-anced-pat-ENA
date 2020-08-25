@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: api
+  template:
+    metadata:
+      labels:
+        name: api
+    spec:
+      containers:
+      - name: apicontainer
+        image: api
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /randomName
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        env:
+          - name: POSTGRES_URL
+            value: dbservice.default.svc.cluster.local
+          - name: METRICS_URL
+            value: http://prometheus.default.svc.cluster.local

@@ -1,0 +1,49 @@
+---
+# tasks file for loadk8stemplates
+- name: Apply Kubernetes Templates from File
+  command: kubectl apply -f {{item}}
+  with_items:
+    - "/home/vagrant/k8s/k8syamls/dbPersVolumeClaim.yml"
+    - "/home/vagrant/k8s/k8syamls/dbPersVolume.yml"
+    - "/home/vagrant/k8s/k8syamls/dbPod.yml"
+    - "/home/vagrant/k8s/k8syamls/dbService.yml"
+    - "/home/vagrant/k8s/k8syamls/apiDeployment.yml"
+    - "/home/vagrant/k8s/k8syamls/apiService.yml"
+    - "/home/vagrant/k8s/k8syamls/webDeployment.yml"
+    - "/home/vagrant/k8s/k8syamls/webService.yml"
+    - "/home/vagrant/k8s/k8syamls/traefik_base.yml"
+    - "/home/vagrant/k8s/k8syamls/traefik_mon_ingresses.yml"
+    - "/home/vagrant/k8s/k8syamls/traefik_ingresses.yml"
+    - "/home/vagrant/k8s/k8syamls/prometheus_configmap.yml"
+    - "/home/vagrant/k8s/k8syamls/prometheus.yml"
+  become: yes
+  become_user: vagrant
+
+#Set up a port redirection to hit the services from outside the cluster
+- name: Copy the port redirect program
+  copy:
+    src: forward_ports.sh #segun path del rol
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+
+#Set up a port redirection to hit the Prometheus service from outside the cluster
+#Not required but I wanted to see it in action.
+- name: Copy the port redirect program
+  copy:
+    src: forward_9090.sh #segun path del rol
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Exec the port redirection as command
+  shell: nohup sudo -E /usr/bin/forward_ports.sh  </dev/null >/dev/null 2>&1 &
+  become: yes
+  become_user: vagrant
+
+- name: Exec the 9090 port redirection as command
+  command: nohup sudo -E /usr/bin/forward_9090.sh </dev/null >/dev/null 2>&1 &
+  become: yes
+  become_user: vagrant

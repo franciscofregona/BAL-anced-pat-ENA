@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: default
+  labels:
+    tier: frontend
+  annotations:
+    name: web
+spec:
+  selector:
+    name: web
+  type: ClusterIP
+  ports:
+    - port: 80
+

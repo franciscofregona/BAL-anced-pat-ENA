@@ -1,0 +1,45 @@
+---
+- name: Pull Postgres image
+  docker_image:
+    name: postgres
+    tag: "12.0"
+    build:
+      pull: yes
+
+- name: Pull flask image
+  docker_image:
+    name: jazzdd/alpine-flask
+    tag: "python3"
+    build:
+      pull: yes
+
+- name: Create images directories
+  file:
+    path: /root/images/
+    state: directory 
+
+- name: Copy the api image files
+  copy:
+    src: "{{playbook_dir}}/images/{{ item }}"
+    dest: "/root/images"
+  with_items:
+   - "api"
+   - "web"
+
+- name: Build the api image
+  docker_image:
+    name: api
+    build:
+      pull: no
+      path: /root/images/api/
+    source: build
+    force_source: yes
+
+- name: Build the web image
+  docker_image:
+    name: web
+    build:
+      pull: no
+      path: /root/images/web/
+    source: build
+    force_source: yes

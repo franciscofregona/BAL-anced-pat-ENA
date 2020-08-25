@@ -1,0 +1,8 @@
+---
+# tasks file for loaddatabase
+- name: Copy and unpack the database into the shared directory.
+  unarchive:
+    src: "{{playbook_dir}}/resources/db.tar.gz"
+    dest: "/exports/nfs"
+    # owner: postgres
+    # group: postgres
